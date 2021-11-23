@@ -32,7 +32,19 @@ async function findPerson(req, res, id) {
     }
 }
 
+async function createPerson(req, res) {
+    try {
+        const newPerson = await personService.createPerson(req.body)
+        
+        res.writeHead(201, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify(newPerson))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
     findAllPeople,
-    findPerson
+    findPerson,
+    createPerson
 }

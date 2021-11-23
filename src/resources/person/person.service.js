@@ -4,7 +4,10 @@ const findAll = async () => personRepo.findAll();
 
 const findOne = async (id) => personRepo.findOne(id);
 
+const createPerson = async (body) => personRepo.create(body);
+
 module.exports = {
     findAll,
-    findOne
+    findOne,
+    createPerson
 }
