@@ -1,5 +1,6 @@
 const personService = require('./person.service');
-const { validate } = require('uuid')
+const { validate } = require('uuid');
+const { getBody } = require('../../utils');
 
 async function findAllPeople(req, res) {
     try {
@@ -34,8 +35,15 @@ async function findPerson(req, res, id) {
 
 async function createPerson(req, res) {
     try {
-        const newPerson = await personService.createPerson(req.body)
-        
+        const bodyNotParsed = await getBody(req);
+        const body = JSON.parse(bodyNotParsed);
+        if (!body.name || !body.age) {
+            res.writeHead(400, { 'Content-Type': 'application/json' })
+            res.end(JSON.stringify({ message: `Both name and age are required` }))
+        }
+
+        const newPerson = await personService.createPerson(body)
+
         res.writeHead(201, { 'Content-Type': 'application/json' })
         res.end(JSON.stringify(newPerson))
     } catch (error) {

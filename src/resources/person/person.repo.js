@@ -1,6 +1,7 @@
-const { classBody } = require('babel-types');
 const people = require('../../data/persons.json');
 const Person = require('./person.model');
+const { writeDataToFile } = require('../../utils');
+const path = require('path');
 
 function findAll() {
     return new Promise((resolve, reject) => {
@@ -23,6 +24,8 @@ function create(body) {
             hobbies: body.hobbies
         });
         people.push(newPerson);
+        writeDataToFile('./data/persons.json', people)
+        resolve(newPerson);
     })
 }
 module.exports = {
