@@ -1,6 +1,7 @@
 const personService = require('./person.service');
 const { validate } = require('uuid');
 const { getBody } = require('../../utils');
+const persons = require('../../data/persons.json');
 
 async function findAllPeople(req, res) {
     try {
@@ -51,8 +52,37 @@ async function createPerson(req, res) {
     }
 }
 
+async function updatePerson(req, res, id) {
+    try {
+        const validator = await validate(id);
+        if (validator) {
+            const person = await personService.findOne(id)
+            if (!person) {
+                res.writeHead(404, { 'Content-Type': 'application/json' })
+                res.end(JSON.stringify({ message: `The person with this ${id} not found`}))
+            } else {
+                const bodyNotParsed = await getBody(req);
+                const body = JSON.parse(bodyNotParsed);
+                
+
+                const updPerson = await personService.update(body, person);
+                // need to update it
+
+                res.writeHead(200, { 'Content-Type': 'application/json' })
+                res.end(JSON.stringify(updPerson))
+            }
+        } else {
+            res.writeHead(400, { 'Content-Type': 'application/json' })
+            res.end(JSON.stringify({ message: `The ${id} you provided is not validated`}))
+        }
+    } catch (error) {
+        
+    }
+}
+
 module.exports = {
     findAllPeople,
     findPerson,
-    createPerson
+    createPerson,
+    updatePerson
 }

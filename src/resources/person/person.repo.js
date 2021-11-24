@@ -1,7 +1,6 @@
 const people = require('../../data/persons.json');
 const Person = require('./person.model');
 const { writeDataToFile } = require('../../utils');
-const path = require('path');
 
 function findAll() {
     return new Promise((resolve, reject) => {
@@ -28,8 +27,18 @@ function create(body) {
         resolve(newPerson);
     })
 }
+
+function update(id, person) {
+    return new Promise((resolve, reject) => {
+        const ind = people.findIndex((el) => el.id === id)
+        people[ind] = {id, ...person};
+        writeDataToFile('./data/persons.json', people);
+        resolve(people[ind])
+    })
+}
 module.exports = {
     findAll,
     findOne,
-    create
+    create,
+    update
 }

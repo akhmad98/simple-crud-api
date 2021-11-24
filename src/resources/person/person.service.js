@@ -6,8 +6,22 @@ const findOne = async (id) => personRepo.findOne(id);
 
 const createPerson = async (body) => personRepo.create(body);
 
+const update = async (body, person) => {
+    const personDTO = {
+        name: body.name || person.name,
+        age: body.age || person.age,
+        hobbies: body.hobbies || person.hobbies
+        }
+
+    return personRepo.update(person.id, personDTO);
+} 
+
+const idFilter = id => user => user.id === id;
+
 module.exports = {
     findAll,
     findOne,
-    createPerson
+    createPerson,
+    idFilter,
+    update
 }
