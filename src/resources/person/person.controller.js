@@ -80,9 +80,32 @@ async function updatePerson(req, res, id) {
     }
 }
 
+async function deletePerson(req, res, id) {
+    try {
+        const validator = await validate(id);
+        if (validator) {
+            const person = await personService.findOne(id)
+            if (!person) {
+                res.writeHead(404, { 'Content-Type': 'application/json' })
+                res.end(JSON.stringify({ message: `The person with this ${id} not found`}))
+            } else {
+                await personService.deleteIt(id);
+                res.writeHead(204, { 'Content-Type': 'application/json' })
+                res.end(JSON.stringify({ message: `The ${id} deleted successfully`}))
+            }
+        } else {
+            res.writeHead(400, { 'Content-Type': 'application/json' })
+            res.end(JSON.stringify({ message: `The ${id} you provided is not validated`}))
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
     findAllPeople,
     findPerson,
     createPerson,
-    updatePerson
+    updatePerson,
+    deletePerson
 }

@@ -16,12 +16,12 @@ const update = async (body, person) => {
     return personRepo.update(person.id, personDTO);
 } 
 
-const idFilter = id => user => user.id === id;
+const deleteIt = id => personRepo.deleteIt(id);
 
 module.exports = {
     findAll,
     findOne,
     createPerson,
-    idFilter,
-    update
+    update,
+    deleteIt
 }

@@ -1,4 +1,4 @@
-const people = require('../../data/persons.json');
+let people = require('../../data/persons.json');
 const Person = require('./person.model');
 const { writeDataToFile } = require('../../utils');
 
@@ -36,9 +36,19 @@ function update(id, person) {
         resolve(people[ind])
     })
 }
+
+function deleteIt(id) {
+    return new Promise((resolve, reject) => {
+        people = people.filter((el) => el.id !== id);
+        writeDataToFile('./data/persons.json', people);
+        resolve(people);
+    })
+}
+
 module.exports = {
     findAll,
     findOne,
     create,
-    update
+    update,
+    deleteIt
 }
